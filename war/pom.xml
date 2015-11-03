@@ -1,0 +1,63 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.jdsnet.demo</groupId>
+  <artifactId>luceemvn</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>war</packaging>
+  <name>Lucee Maven Demo</name>
+  <description>
+</description>
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.3</version>
+        <configuration>
+          <source>1.7</source>
+          <target>1.7</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-war-plugin</artifactId>
+        <version>2.6</version>
+        <configuration>
+          <failOnMissingWebXml>false</failOnMissingWebXml>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  
+  <repositories>
+    <repository>
+      <id>sonatype-snapshots</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </repository>
+  </repositories>
+  
+  <dependencies>
+    <dependency>
+      <groupId>org.lucee</groupId>
+      <artifactId>lucee</artifactId>
+      <version>5.0.0.102-SNAPSHOT</version>
+      <exclusions>
+        <exclusion>
+          <artifactId>*</artifactId>
+          <groupId>*</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.apache.felix</groupId>
+      <artifactId>org.apache.felix.framework</artifactId>
+      <version>4.2.1</version>
+    </dependency>
+
+
+    <dependency>
+    	<groupId>javax.servlet</groupId>
+    	<artifactId>javax.servlet-api</artifactId>
+    	<version>3.1.0</version>
+    </dependency>
+  </dependencies>
+</project>

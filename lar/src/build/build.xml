@@ -1,0 +1,26 @@
+<project>
+	
+	<property name="bundles.dir" value="${project.build.directory}/tmp/lucee-server/bundles" />
+	<property name="PW_WEB" value="password" />
+	
+	<condition property="setup.complete">
+		<available file="${bundles.dir}" type="dir" />
+	</condition>
+	
+	<target name="setup" unless="${setup.complete}">
+		<copy todir="${bundles.dir}" flatten="true">
+			<path>
+				<pathelement path="${lucee.classpath}"/>
+			</path>
+		</copy>
+		
+		<script language="CFML">
+			admin	action="updatePassword"
+					type="web"
+					oldPassword=""
+					newPassword=PW_WEB
+					;
+		</script>
+	</target>
+	
+</project>

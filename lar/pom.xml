@@ -1,0 +1,126 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.jdsnet.demo</groupId>
+	<artifactId>luceemvn-lar</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	
+	<properties>
+		<lucee.version>5.0.0.102-SNAPSHOT</lucee.version>
+		<lar.outputfile>${project.build.finalName}.lar</lar.outputfile>
+		<lar.includeCFML>false</lar.includeCFML>
+		<lar.includeStatic>false</lar.includeStatic>
+		<!-- type should be either component or mapping -->
+		<lar.type>component</lar.type>
+		<lar.mapping.virtual>/${project.build.finalName}</lar.mapping.virtual>
+	</properties>
+	
+	<build>
+		<resources>
+			<resource>
+				<directory>src/main/lucee</directory>
+			</resource>
+		</resources>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.6</version>
+			
+				<executions>
+					<execution>
+						<id>default-jar</id>
+						<phase>none</phase>
+					</execution>
+				</executions>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.8</version>
+				
+				<executions>
+					<execution>
+						<id>lucee-package</id>
+						<phase>package</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						
+						<configuration>
+							<target>
+								<property name="lucee.classpath" refid="maven.plugin.classpath" />
+								
+								<java	classname="org.apache.tools.ant.launch.Launcher"
+										fork="true"
+										failonerror="true"
+								>
+									<classpath path="${java.class.path}">
+										<pathelement path="${lucee.classpath}" />
+									</classpath>
+									
+									<arg value="-f"/>
+									<arg value="src/build/package.xml" />
+									
+									<jvmarg value="-Dlucee.classpath=${lucee.classpath}"/>
+									<jvmarg value="-Dlucee.base.dir=target/tmp"/>
+									<jvmarg value="-Dlucee.web.dir=target/tmp/lucee-web"/>
+									<jvmarg value="-Dlucee.enable.dialect=true"/>
+					
+									<jvmarg value="-Dproject.build.directory=${project.build.directory}" />
+									<jvmarg value="-Dproject.build.outputDirectory=${project.build.outputDirectory}" />
+									
+									<jvmarg value="-Dlar.outputfile=${lar.outputfile}" />
+									<jvmarg value="-Dlar.sourceDirectory=${project.build.sourceDirectory}" />
+									<jvmarg value="-Dlar.type=${lar.type}" />
+									<jvmarg value="-Dlar.mapping.virtual=${lar.mapping.virtual}" />
+									<jvmarg value="-Dlar.includeCFML=${lar.includeCFML}" />
+									<jvmarg value="-Dlar.includeStatic=${lar.includeStatic}" />
+								</java>
+							</target>
+						</configuration>
+					</execution>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>org.lucee</groupId>
+						<artifactId>lucee</artifactId>
+						<version>${lucee.version}</version>
+					</dependency>
+					<dependency>
+						<groupId>org.apache.ant</groupId>
+						<artifactId>ant</artifactId>
+						<version>1.9.6</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>1.9.1</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals><goal>attach-artifact</goal></goals>
+						<configuration>
+							<artifacts>
+								<artifact>
+									<file>${project.build.directory}/${lar.outputfile}</file>file>
+									<type>lar</type>
+								</artifact>
+							</artifacts>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+	
+	<repositories>
+		<repository>
+			<id>sonatype-snapshots</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</repository>
+	</repositories>
+</project>

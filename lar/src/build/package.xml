@@ -1,0 +1,87 @@
+<project name="package" default="package">
+
+	<import file="build.xml"/>
+	
+	<property name="LAR_SOURCE_DIR" value="${project.build.outputDirectory}" />
+	<property name="LAR_TARGET_DIR" value="${project.build.directory}" />
+	<property name="LAR_OUT_FILE" value="${lar.outputfile}" />
+	<property name="LAR_PATH_VIRTUAL" value="${lar.mapping.virtual}" />
+	<property name="LAR_INC_CFML" value="${lar.includeCFML}" />
+	<property name="LAR_INC_STATIC" value="${lar.includeStatic}" />
+	<property name="LAR_TYPE" value="${lar.type}" />
+	
+	
+	<target name="package" depends="setup">
+		<script language="CFML"><![CDATA[
+			switch(LAR_TYPE) {
+				case "component":
+					
+					admin	action		= "updateComponentMapping"
+							type		= "web"
+							password	= PW_WEB
+							
+							virtual		= LAR_PATH_VIRTUAL
+							physical	= LAR_SOURCE_DIR
+							toplevel	= true
+							archive		= ""
+							primary		= "physical"
+							trusted		= false
+					;
+			
+					admin	action			= "createComponentArchive"
+							type			= "web"
+							password		= PW_WEB
+							
+							virtual			= LAR_PATH_VIRTUAL
+							file			= LAR_TARGET_DIR & "/" & LAR_OUT_FILE
+							addCFMLFiles	= LAR_INC_CFML
+							addNonCFMLFiles	= LAR_INC_STATIC
+					;
+			
+					admin	action		= "removeComponentMapping"
+							type		= "web"
+							password	= PW_WEB
+			
+							virtual		= LAR_PATH_VIRTUAL
+					;
+			
+				break;
+			
+
+				case "mapping":
+					
+					admin	action		= "updateMapping"
+							type		= "web"
+							password	= PW_WEB
+							
+							virtual		= LAR_PATH_VIRTUAL
+							physical	= LAR_SOURCE_DIR
+							toplevel	= true
+							archive		= ""
+							primary		= "physical"
+							trusted		= false
+					;
+			
+					admin	action			= "createArchive"
+							type			= "web"
+							password		= PW_WEB
+							
+							virtual			= LAR_PATH_VIRTUAL
+							file			= LAR_TARGET_DIR & "/" & LAR_OUT_FILE
+							addCFMLFiles	= LAR_INC_CFML
+							addNonCFMLFiles	= LAR_INC_STATIC
+					;
+			
+					admin	action		= "removeMapping"
+							type		= "web"
+							password	= PW_WEB
+			
+							virtual		= LAR_PATH_VIRTUAL
+					;
+			
+				break;
+			}
+		]]></script>
+	</target>
+	
+</project>
